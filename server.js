@@ -1,4 +1,6 @@
 const express = require('express');
+require('inquirer')
+require('console.table')
 // Import and require mysql2
 const mysql = require('mysql2/promise');
 
