@@ -1,6 +1,9 @@
 const express = require('express');
 // Import and require mysql2
-const mysql = require('mysql2');
+const mysql = require('mysql2/promise');
+
+// get the promise implementation, we will use bluebird
+const bluebird = require('bluebird');
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -9,29 +12,19 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-// Connect to database
-const db = mysql.createConnection(
-  {
-    host: 'localhost',
-    user: 'root',
-    password: 'r00td@t@',
-    database: 'company_db'
-  },
-  console.log(`Connected to the courses_db database.`)
+// create the connection, specify bluebird as Promise
+const db = await mysql.createConnection(
+    {
+        host:'localhost', 
+        user: 'root', 
+        database: 'test', 
+        Promise: bluebird},
+        console.log(`Connected to the courses_db database.`)
 );
 
+// query database
+const [rows, fields] = await db.execute('SELECT * FROM `table` WHERE `name` = ? AND `age` > ?', ['Morty', 14]);
 
-// db.query(`DELETE FROM tbl_nm WHERE id = ?`, #, (err, result) => {
-//   if (err) {
-//     console.log(err);
-//   }
-//   console.log(result);
-// });
-
-// Query database
-db.query('SELECT * FROM tbl_nm', function (err, results) {
-  console.log(results);
-});
 
 // Default response for any other request (Not Found)
 app.use((req, res) => {
