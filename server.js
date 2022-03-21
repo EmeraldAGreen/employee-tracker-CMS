@@ -17,7 +17,7 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-// create the connection, specify bluebird as Promise
+// create the db, specify bluebird as Promise
 const db = mysql2.createConnection(
     {
         host: 'localhost',
@@ -85,22 +85,39 @@ function startMenu() {
         })
 };
 
+// VIEW
+// Function to view all departments
+function viewAllDepartments() {
+  var query = `SELECT department_name AS Departments FROM departments;`;
+  db.query(query, function(err, query){
+    console.table(query);
+  });
+startMenu();
+};
 
+//Function to view all roles
+function viewAllRoles() {
+    var query = `SELECT title AS Roles, salary AS Salaries FROM roles;`
+    db.query(query, function(err, query){
+      console.table(query);
+ 
+    });     
+startMenu();
+  };
 
-
-
-// VIEW 
-// function viewAllDepartments() {
-
-// query database
-// const [rows, fields] = await db.execute('SELECT * FROM `table` WHERE `name` = ? AND `age` > ?', ['Morty', 14], 
-// ['Rick C-137', 53],
-// function(err, results, fields) {
-//   console.log(results); // results contains rows returned by server
-//   console.log(fields);
-// });
-
+// //Function view all employees
+function viewAllEmployees() {
+    var query = `SELECT first_name AS First, last_name AS Last FROM employees`;
+    db.query(query, function(err, query){
+        console.table(query);
+        
+    });
+startMenu();
+};
 // ADD
+
+
+
 
 // UPDATE
 
