@@ -6,7 +6,7 @@ const consoleTable = require('console.table')
 const prompt = require("./prompts");
 
 // Import and require mysql2
-const db = require('mysql2-promise');
+const mysql2 = require('mysql2');
 // get the promise implementation, we will use bluebird
 const bluebird = require('bluebird');
 
@@ -17,29 +17,43 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-async function main() {
-    // create the connection, specify bluebird as Promise
-    const conn = await db.createConnection(
-        {
-            host: 'localhost',
-            user: 'root',
-            password: 'r00td@t@',
-            database: 'company_db',
-            Promise: bluebird
-        },
-        console.log(`Connected to the company_db database.`));
-    conn.connect(function (err) {
-        if (err) throw err
-    });
-};
+// create the connection, specify bluebird as Promise
+const db = mysql2.createConnection(
+    {
+        host: 'localhost',
+        user: 'root',
+        password: 'r00td@t@',
+        database: 'company_db',
+        Promise: bluebird
+    },
+    console.log(`Connected to the company_db database.`));
+
+db.connect(function (err) {
+    if (err) throw err;
+    startMenu();
+});
+
 
 // WHEN I start the application
 // THEN I am presented with the following options: view all departments, view all roles, view all employees, add a department, add a role, add an employee, and update an employee role
-main();
-
-    inquirer.prompt()
-    .then(function ({ action }) {
-            switch (action) {
+function startMenu() {
+    inquirer.prompt({
+        name: "action",
+        type: "list",
+        message: "What would you like to do?",
+        choices: [
+            "View All Departments",
+            "View All Roles",
+            "View All Employees",
+            "Add A Department",
+            "Add A Role",
+            "Add A Employee",
+            "Update an Employee Role",
+            "Exit",
+          ]
+    })
+        .then(function(answer) {
+            switch (answer.action) {
                 case "View All Departments":
                     viewAllDepartments();
                     break;
@@ -69,6 +83,11 @@ main();
                     break;
             }
         })
+};
+
+
+
+
 
 // VIEW 
 // function viewAllDepartments() {
