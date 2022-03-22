@@ -83,7 +83,7 @@ function startMenu() {
 };
 
 // VIEW (3)
-// Function to view all departments
+// DEPARTMENTS
 function viewAllDepartments() {
   var query = `SELECT department_name AS Departments FROM departments;`;
   db.query(query, function(err, query){
@@ -92,7 +92,7 @@ function viewAllDepartments() {
 startMenu();
 };
 
-//Function to view all roles
+// ROLES
 function viewAllRoles() {
     var query = `SELECT title AS Roles, salary AS Salaries FROM roles;`
     db.query(query, function(err, query){
@@ -101,7 +101,7 @@ function viewAllRoles() {
 startMenu();
   };
 
-// //Function view all employees
+// EMPLOYEES
 function viewAllEmployees() {
     var query = `SELECT first_name AS First, last_name AS Last FROM employees`;
     db.query(query, function(err, query){
@@ -112,6 +112,7 @@ startMenu();
 };
 
 // ADD (3)
+// DEPARTMENT
 function addDepartment() {
   inquirer
     .prompt([
@@ -137,7 +138,7 @@ function addDepartment() {
   });
 };
 
-//Function to new add role
+//ROLE
 function addRole() {
   let existingDepartments = [];
     db.query("SELECT * FROM departments", function(err, resDept) {
@@ -191,6 +192,7 @@ function addRole() {
 })
 };
 
+// EMPLOYEE
 function addEmployee() {
     //array to display prompt choices from database items 
     var existingRoles = [];
@@ -263,7 +265,67 @@ function addEmployee() {
 })};
 
 // UPDATE (1)
+// EMPLOYEE ROLE
+function updateEmployeeRole() {
+  var existingEmployees = [];
+    db.query("SELECT * FROM employees", function(err, resEmployees) {
+      if (err) throw err;
+      for (var i = 0; i < resEmployees.length; i++) {
+        var employeeList = `${resEmployees[i].first_name} ${resEmployees[i].last_name}`;
+        existingEmployees.push(employeeList);
+    };
+    
+    var existingRoles = [];
+  db.query("SELECT * FROM roles", function(err, resRole) {
+    if (err) throw err;
+    for (var i = 0; i < resRole.length; i++) {
+      var roleList = resRole[i].title;
+     existingRoles.push(roleList);
+    };
 
+    inquirer
+    .prompt([
+    {
+      name: "employee_name",
+      type: "rawlist",
+      message: "Select the employee profile you would like to update:",
+      choices: existingEmployees
+    },
+    {
+      name: "role_id",
+      type: "rawlist",
+      message: "Select this employee's new role:",
+      choices: existingRoles
+    }
+  ])
+  .then(function(answer) {
+
+    var updatedEmployee;
+        for (var i = 0; i < resEmployees.length; i++) {
+          if (`${resEmployees[i].first_name} ${resEmployees[i].last_name}` === answer.employee_name) {
+            updatedEmployee = resEmployees[i];
+        }
+      };
+
+    var updatedRole;
+      for (var i = 0; i < resRole.length; i++) {
+        if (resRole[i].title === answer.role_id) {
+          updatedRole = resRole[i];
+        }
+      };
+      db.query(
+        "UPDATE employees SET role_id = ? WHERE id = ?",
+        [updatedRole.id, updatedEmployee.id],
+        function(err) {
+          if (err) throw err;
+          console.log("Employee role updated!");
+          startMenu();
+        }
+      );
+    })
+   })
+  })
+};
 
 // Default response for any other request (Not Found)
 app.use((req, res) => {
