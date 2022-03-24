@@ -175,7 +175,7 @@ function addRole() {
     type: "list",
     message: "Which department does this role belong in?",
     choices: existingDepartments
-  }
+  },
 ])
 .then(function(answer) {
   var chosenDepartment;
@@ -212,7 +212,7 @@ function addEmployee() {
             var roleList = resRole[i].title;
             existingRoles.push(roleList);
         }
-        // select from all of the employees; could all have a manager_id;
+        // select from all of the employees
         var existingEmployees = [];
     db.query("SELECT * FROM employees", function (err, resEmployees) {
         if (err) throw err;
@@ -243,7 +243,7 @@ function addEmployee() {
         type: "list",
         message: "Select the new employee's Manager or Director:",
         choices: existingEmployees
-      }
+      },
     ])
       .then(function(answer) {
         //for loop to retun 
@@ -306,7 +306,7 @@ function updateEmployeeRole() {
       type: "rawlist",
       message: "Select this employee's new role:",
       choices: existingRoles
-    }
+    },
   ])
   .then(function(answer) {
 
