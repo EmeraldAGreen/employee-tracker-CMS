@@ -73,10 +73,10 @@ function startMenu() {
                     updateEmployeeRole();
                     break;
                 case "Exit":
-                    console.log(
+                    console.info(
                         `You're not leaving tomorrow. You're leaving today right?`
                     );
-                    conn.end();
+                    db.end();
                     break;
             }
         })
@@ -140,7 +140,7 @@ function addDepartment() {
       },
       function(err) {
         if (err) throw err;
-        console.log(`Your new department ${answer.new_department} has been added`);
+        console.info(`Your new department ${answer.new_department} has been added`);
         viewAllDepartments();
         startMenu();
       }
@@ -175,7 +175,7 @@ function addRole() {
     type: "list",
     message: "Which department does this role belong in?",
     choices: existingDepartments
-  },
+  }
 ])
 .then(function(answer) {
   var chosenDepartment;
@@ -193,7 +193,7 @@ function addRole() {
     },
     function(err) {
       if (err) throw err;
-      console.log(`Your new role ${answer.title} has been added successfully!`);
+      console.info(`Your new role ${answer.title} has been added successfully!`);
       viewAllRoles();
       startMenu();
     }
@@ -265,7 +265,7 @@ function addEmployee() {
           },
           function(err) {
             if (err) throw err;
-            console.log(`Your new employee, ${answer.first_name} ${answer.last_name} has been added successfully!`);
+            console.info(`Your new employee, ${answer.first_name} ${answer.last_name} has been added successfully!`);
             viewAllEmployees();
             startMenu();
           }
@@ -297,13 +297,13 @@ function updateEmployeeRole() {
     .prompt([
     {
       name: "employee_name",
-      type: "rawlist",
+      type: "list",
       message: "Select the employee profile you would like to update:",
       choices: existingEmployees
     },
     {
       name: "role_id",
-      type: "rawlist",
+      type: "list",
       message: "Select this employee's new role:",
       choices: existingRoles
     },
@@ -328,7 +328,7 @@ function updateEmployeeRole() {
         [updatedRole.id, updatedEmployee.id],
         function(err) {
           if (err) throw err;
-          console.log("Employee role updated!");
+          console.info("Employee role updated!");
           startMenu();
         }
       );
@@ -343,6 +343,6 @@ app.use((req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`Server running on port https://localhost:${PORT}`);
+    console.info(`Server running on port https://localhost:${PORT}`);
 });
 
