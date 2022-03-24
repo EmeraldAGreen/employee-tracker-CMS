@@ -85,7 +85,7 @@ function startMenu() {
 // VIEW (3)
 // DEPARTMENTS
 function viewAllDepartments() {
-  var query = `SELECT department_name AS Departments FROM departments;`;
+  var query = `SELECT id AS ID, department_name AS Departments FROM departments;`;
   db.query(query, function(err, query){
     console.table(query);
   });
@@ -94,7 +94,7 @@ startMenu();
 
 // ROLES
 function viewAllRoles() {
-    var query = `SELECT title AS Roles, salary AS Salaries FROM roles;`
+    var query = `SELECT roles.id AS RoleID, title AS Role, salary AS Salary, department_id AS Department FROM roles, departments WHERE roles.department_id=departments.id;`
     db.query(query, function(err, query){
       console.table(query);
     });     
@@ -103,7 +103,17 @@ startMenu();
 
 // EMPLOYEES
 function viewAllEmployees() {
-    var query = `SELECT first_name AS First, last_name AS Last FROM employees`;
+    var query = `
+    SELECT employees.id AS EmployeeID, 
+    employees.first_name AS FirstName, 
+    employees.last_name AS LastName, 
+    roles.title AS Role,
+    roles.salary AS Salary,
+    departments.department_name AS Department, 
+    manager_id AS Manager 
+    FROM employees 
+    LEFT JOIN roles ON employees.role_id=roles.id
+    LEFT JOIN departments ON departments.id = roles.department_id;`;
     db.query(query, function(err, query){
         console.table(query);
         
