@@ -20,10 +20,12 @@ Use the [MySQL2 package] (https://www.npmjs.com/package/mysql2), the [Inquirer p
 ## Usage
 View and manage the departments, roles, and employees in your company, so that you can organize and plan your business.
 
+## Walkthrough
+[Watch the video.](https://drive.google.com/file/d/1ek07O607MQr0BpJGK6BULbZg0eWvIkea/view)
+
 ## License
 This project is licensed under  MIT.
 Read more about [MIT](https://opensource.org/licenses/MIT).
-
 
 ## Contribution
 Please contact me via the email below to report bugs or suggest enhancements.
